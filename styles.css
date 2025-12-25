@@ -1,0 +1,174 @@
+/* === Color Variables === */
+:root {
+  --brand-orange: #ff8c00;   /* vivid dark orange */
+  --brand-red:    #d6310c;   /* strong crimson red */
+  --brand-gold:   #ffd700;   /* classic gold */
+  --text-dark:    #0c0c0c;   /* near-black text */
+  --border-gray:  #ccc;      /* light gray borders */
+  --bg-white:     #fff;      /* pure white */
+}
+
+/* === Aurora Background === */
+@keyframes aurora {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body {
+  background: radial-gradient(circle at 20% 20%, var(--brand-orange), transparent),
+              radial-gradient(circle at 80% 30%, var(--brand-red), transparent),
+              radial-gradient(circle at 50% 80%, var(--brand-gold), transparent);
+  background-size: 200% 200%;
+  animation: aurora 20s ease infinite;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--text-dark);
+}
+
+/* === Header === */
+header {
+  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent overlay */
+  padding: 10px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--text-dark);
+}
+
+/* === Navbar === */
+.navbar {
+  padding: 0;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--text-dark);
+}
+
+.navbar-brand img {
+  margin-right: 8px;
+}
+
+/* === Logo Box === */
+.logo-box {
+  max-height: 100px;
+  max-width: 100px;
+  overflow: hidden;
+}
+
+.logo-box img {
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* === Content Box === */
+.content-box {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-gray);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* === Footer === */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(255,255,255,0.8);
+  border-top: 1px solid var(--border-gray);
+  color: var(--text-dark);
+}
+/* === Game Cards === */
+.card.content-box {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.9); /* slightly translucent to let aurora glow peek through */
+  border: 1px solid var(--border-gray);
+  border-radius: 12px;
+}
+
+/* Hover effect */
+.card.content-box:hover {
+  transform: translateY(-5px); /* subtle lift */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* deeper shadow */
+}
+
+/* Card images */
+.card-img-top {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  object-fit: cover;
+  max-height: 250px;   /* keeps images consistent */
+  width: 100%;         /* responsive scaling */
+  height: auto;        /* maintain aspect ratio */
+}
+
+/* Card titles */
+.card-title {
+  font-weight: bold;
+  color: var(--text-dark);
+}
+
+/* Card buttons */
+.card .btn-primary {
+  background-color: var(--brand-orange);
+  border: none;
+  transition: background-color 0.2s ease;
+}
+
+.card .btn-primary:hover {
+  background-color: var(--brand-red);
+}
+
+/* === Contact Form Styling === */
+#contactForm {
+  display: flex;
+  flex-direction: column; /* stack inputs vertically */
+  gap: 15px;              /* consistent spacing between fields */
+}
+
+#contactForm label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--text-dark);
+}
+
+#contactForm input,
+#contactForm textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-gray);
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+#contactForm textarea {
+  resize: vertical; /* allow resizing only up/down */
+  min-height: 120px; /* ensures message box is tall enough */
+}
+
+#contactForm button {
+  align-self: flex-start; /* keeps button aligned left */
+  background-color: var(--brand-orange);
+  color: var(--bg-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#contactForm button:hover {
+  background-color: var(--brand-red);
+}
