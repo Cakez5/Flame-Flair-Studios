@@ -1,41 +1,144 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  if (!form) return;
+  const studioContactEmail = window.STUDIO_CONTACT_EMAIL || "";
+  const contactForm = document.getElementById("contactForm");
+  const questionForm = document.getElementById("questionForm");
+  const deliveryStatus = document.getElementById("deliveryStatus");
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  const formatSubmittedAt = (submittedAt) => {
+    if (!submittedAt) {
+      return "Pending timestamp";
+    }
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
+    const date = new Date(submittedAt);
+    if (Number.isNaN(date.getTime())) {
+      return "Pending timestamp";
+    }
 
-    if (name && email && message) {
-      // Show success message
-      const successBox = document.getElementById("formSuccess");
-      if (successBox) {
-        successBox.style.display = "block";
-        successBox.textContent = `✅ Thanks, ${name}! We'll reply to ${email} soon.`;
+    return date.toLocaleString();
+  };
+
+  const updateDeliveryStatus = () => {
+    if (!deliveryStatus) {
+      return;
+    }
+
+    deliveryStatus.textContent = studioContactEmail
+      ? `Questions and contact messages will be sent to ${studioContactEmail}.`
+      : "No studio email is configured yet. Add one in site-config.js to make submissions live.";
+  };
+
+  const submitToStudioEmail = async (form, payload) => {
+    if (!studioContactEmail) {
+      throw new Error("Studio email missing");
+    }
+
+    const formData = new FormData(form);
+    formData.append("_subject", `Flame Flair Studios ${payload.type} submission`);
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+    formData.append("source", payload.source);
+    formData.append("submissionType", payload.type);
+    formData.append("submittedAt", payload.submittedAt);
+
+    const response = await fetch(`https://formsubmit.co/ajax/${studioContactEmail}`, {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json"
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    return response.json();
+  };
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+
+      if (!name || !email || !message) {
+        alert("Please fill out all fields.");
+        return;
       }
 
-      // Save to localStorage
-      localStorage.setItem("contactName", name);
-      localStorage.setItem("contactEmail", email);
-      localStorage.setItem("contactMessage", message);
+      const successBox = document.getElementById("formSuccess");
 
-      // Redirect after short delay (so user sees success message)
-      setTimeout(() => {
-        window.location.href = "review.html";
-      }, 1500);
-    } else {
-      alert("Please fill out all fields.");
-    }
-  });
+      try {
+        await submitToStudioEmail(contactForm, {
+          type: "contact",
+          source: "contact-page",
+          submittedAt: new Date().toISOString()
+        });
 
-  // Object + Array example (rubric requirement)
+        if (successBox) {
+          successBox.style.display = "block";
+          successBox.textContent = `Thanks, ${name}. Your message was sent to the studio inbox.`;
+        }
+
+        contactForm.reset();
+      } catch (error) {
+        if (successBox) {
+          successBox.style.display = "block";
+          successBox.textContent = studioContactEmail
+            ? "Submission could not be delivered to the studio inbox. Confirm the email service setup and try again."
+            : "Submission is not connected yet. Add the studio email in site-config.js first.";
+        }
+      }
+    });
+  }
+
+  if (questionForm) {
+    questionForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("questionName").value.trim();
+      const email = document.getElementById("questionEmail").value.trim();
+      const question = document.getElementById("questionMessage").value.trim();
+      const successBox = document.getElementById("questionSuccess");
+
+      if (!name || !question) {
+        alert("Please add your name and question.");
+        return;
+      }
+
+      try {
+        await submitToStudioEmail(questionForm, {
+          type: "question",
+          source: "home-page",
+          submittedAt: new Date().toISOString()
+        });
+
+        if (successBox) {
+          successBox.style.display = "block";
+          successBox.textContent = `Question received, ${name}. It was sent to the studio inbox.`;
+        }
+
+        questionForm.reset();
+      } catch (error) {
+        if (successBox) {
+          successBox.style.display = "block";
+          successBox.textContent = studioContactEmail
+            ? "Question could not be delivered to the studio inbox. Confirm the email service setup and try again."
+            : "Question submission is not connected yet. Add the studio email in site-config.js first.";
+        }
+      }
+    });
+  }
+
+  updateDeliveryStatus();
+
   const games = [
-    { title: "Elmentallia", genre: "RPG" },
+    { title: "Elementallia: Land of Deception", genre: "RPG" },
     { title: "Prototype Quest", genre: "Adventure" }
   ];
 
-  games.forEach(game => console.log(`${game.title} is a ${game.genre}`));
+  games.forEach((game) => console.log(`${game.title} is a ${game.genre}`));
 });

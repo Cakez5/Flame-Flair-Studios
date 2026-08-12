@@ -1,0 +1,1 @@
+window.STUDIO_CONTACT_EMAIL = "flameflairstudio@gmail.com";
