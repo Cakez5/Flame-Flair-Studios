@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (successBox) {
           successBox.style.display = "block";
-          successBox.textContent = `Thanks, ${name}. Your message was sent to the studio inbox.`;
+          successBox.textContent = `Thanks, ${name}. Your message was sent successfully.`;
         }
 
         contactForm.reset();
@@ -88,8 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (successBox) {
           successBox.style.display = "block";
           successBox.textContent = studioContactEmail
-            ? "Submission could not be delivered to the studio inbox. Confirm the email service setup and try again."
-            : "Submission is not connected yet. Add the studio email in site-config.js first.";
+            ? "Submission could not be delivered. Confirm the configured email service and try again."
+            : "Submission is not connected yet. Add the email in site-config.js first.";
         }
       }
     });
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (successBox) {
           successBox.style.display = "block";
-          successBox.textContent = `Question received, ${name}. It was sent to the studio inbox.`;
+          successBox.textContent = `Question received, ${name}. It was sent successfully.`;
         }
 
         questionForm.reset();
@@ -126,8 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (successBox) {
           successBox.style.display = "block";
           successBox.textContent = studioContactEmail
-            ? "Question could not be delivered to the studio inbox. Confirm the email service setup and try again."
-            : "Question submission is not connected yet. Add the studio email in site-config.js first.";
+            ? "Question could not be delivered. Confirm the configured email service and try again."
+            : "Question submission is not connected yet. Add the email in site-config.js first.";
         }
       }
     });
